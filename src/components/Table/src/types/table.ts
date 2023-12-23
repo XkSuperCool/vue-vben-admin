@@ -12,6 +12,7 @@ import { ComponentType } from './componentType';
 import { VueNode } from '@/utils/propTypes';
 import { RoleEnum } from '@/enums/roleEnum';
 import { FixedType } from 'ant-design-vue/es/vc-table/interface';
+import type { ComponentProps } from '@/components/Form/src/types';
 
 export declare type SortOrder = 'ascend' | 'descend';
 
@@ -419,8 +420,10 @@ export type CellFormat =
   | ((text: string, record: Recordable, index: number) => string | number)
   | Map<string | number, any>;
 
+export type ToBasicColumnAll<T extends ComponentType> = T extends any ? _BasicColumn<T> : never;
+
 // @ts-ignore
-export interface BasicColumn extends ColumnProps<Recordable> {
+export interface _BasicColumn<T extends ComponentType = any> extends ColumnProps<Recordable> {
   children?: BasicColumn[];
   filters?: {
     text: string;
@@ -450,15 +453,15 @@ export interface BasicColumn extends ColumnProps<Recordable> {
   edit?: boolean;
   editRow?: boolean;
   editable?: boolean;
-  editComponent?: ComponentType;
+  editComponent?: T;
   editComponentProps?:
     | ((opt: {
         text: string | number | boolean | Recordable;
         record: Recordable;
         column: BasicColumn;
         index: number;
-      }) => Recordable)
-    | Recordable;
+      }) => ComponentProps[T])
+    | ComponentProps[T];
   editRule?: boolean | ((text: string, record: Recordable) => Promise<string>);
   editValueMap?: (value: any) => string;
   onEditRow?: () => void;
@@ -477,6 +480,8 @@ export interface BasicColumn extends ColumnProps<Recordable> {
   // 动态 Disabled
   editDynamicDisabled?: boolean | ((record: Recordable) => boolean);
 }
+
+export type BasicColumn = ToBasicColumnAll<ComponentType>;
 
 export type ColumnChangeParam = {
   dataIndex: string;

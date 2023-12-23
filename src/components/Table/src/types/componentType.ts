@@ -1,4 +1,7 @@
-export type ComponentType =
+import { ComponentProps } from '@/components/Form/src/types';
+
+export type ComponentType = keyof Pick<
+  ComponentProps,
   | 'Input'
   | 'InputNumber'
   | 'Select'
@@ -11,4 +14,5 @@ export type ComponentType =
   | 'TimePicker'
   | 'RadioGroup'
   | 'RadioButtonGroup'
-  | 'ApiRadioGroup';
+  | 'ApiRadioGroup'
+>;
